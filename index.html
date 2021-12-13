@@ -177,7 +177,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2021-12-13 10:12:31 / Modified: 15:41:22" itemprop="dateCreated datePublished" datetime="2021-12-13T10:12:31+08:00">2021-12-13</time>
+              <time title="Created: 2021-12-13 10:12:31 / Modified: 15:57:38" itemprop="dateCreated datePublished" datetime="2021-12-13T10:12:31+08:00">2021-12-13</time>
             </span>
 
           
@@ -299,9 +299,13 @@ x=x-\alpha*\frac{m_t}{np.sqrt(v)+\theta}\\
 <p><strong>判别式模型</strong>（Discriminative Model）是直接对条件概率p(y|x;θ)建模。常见的判别式模型有 线性回归模型、线性判别分析、支持向量机SVM、神经网络等。</p>
 <p><strong>生成式模型</strong>（Generative Model）则会对x和y的联合分布p(x,y)建模，然后通过贝叶斯公式来求得p(yi|x)，然后选取使得p(yi|x)最大的yi，即：CRF, naive Bayesian</p>
 <h4 id="torch中tensor-parameter-variable的区别">torch中Tensor, Parameter, Variable的区别</h4>
-<p><code>Tensor</code>: torch中操作的基本单位，等价于numpy中的向量array，能够与array相互转换</p>
-<p><code>Variable</code>: 对torch的封装，以及在计算图中的额外属性 {.grad, grad_fn}，其中requires_grad默认为false</p>
-<p><code>Parameter</code>: 属于variable的子类。通过model.parameters()获取对模型需要更新的参数，并通过optimizer(model.parameters(), lr)来反向传播</p>
+<p>从0.4起， Variable 正式合并入Tensor类，通过Variable嵌套实现的自动微分功能已经整合进入了Tensor类中。虽然为了代码的兼容性还是可以使用Variable(tensor)这种方式进行嵌套，但是这个操作其实什么都没做。</p>
+<p>所以，以后的代码建议直接使用Tensor类进行操作，因为官方文档中已经将Variable设置成过期模块。</p>
+<p>要想通过Tensor类本身就支持了使用autograd功能，只需要设置.requires_grad=True</p>
+<p><code>x = torch.rand(5, 5, requires_grad=True)</code></p>
+<p><code>Tensor</code>: torch中操作的基本单位，等价于numpy中的向量array，能够与array相互转换. torch.from_numpy(), .numpy(), Variable类中的的grad和grad_fn属性已经整合进入了Tensor类中</p>
+<p><code>Parameter</code>: 属于Tensor的子类。通过model.parameters()获取对模型需要更新的参数，并通过optimizer(model.parameters(), lr)来反向传播</p>
+<h6 id="tensor.requires_grad属性跟随">tensor.requires_grad属性跟随</h6>
 <p>在张量间的计算过程中，如果在所有输入中，有一个输入需要求导，那么输出一定会需要求导；相反，只有当所有输入都不需要求导的时候，输出才会不需要。</p>
 <p>在训练过程中，虽然input默认requires_grad=False，但是model(nn.Module)中使用的model.parameters()是继承与Parameter，因此output以及loss_digits会默认带有grad</p>
 <p>若需要获取model中所有层的参数，则需要使用model.named_parameters()</p>
