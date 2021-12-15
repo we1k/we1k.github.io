@@ -183,7 +183,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-12-15 11:14:26" itemprop="dateModified" datetime="2021-12-15T11:14:26+08:00">2021-12-15</time>
+                <time title="Modified: 2021-12-15 11:19:07" itemprop="dateModified" datetime="2021-12-15T11:19:07+08:00">2021-12-15</time>
               </span>
 
           
@@ -207,8 +207,8 @@ L(\Phi) = \sum^{N}_{n=1}l^n(\theta^n)
 \]</span> 对model pretraining来说，需要学习一个参数<span class="math inline">\(\Phi\)</span>，使得此参数在多个样本集上<strong>此时</strong>已经获得最小loss。简单来说就是<strong>当前效果好</strong>。 <span class="math display">\[
 L(\Phi) = \sum^{N}_{n=1}l^n(\Phi)
 \]</span> <em>注意此时model pretrain对于多个模型来说都是使用的同一个参数</em></p>
-<p><img src="D:\ad\github_blog\source\_posts\Meta-learning-MAML-implement\image-20211214171911491.png" alt="Source of images: http://speech.ee.ntu.edu.tw/~tlkagk/courses/ML_2019/Lecture/Meta1%20(v6).pdf" style="zoom:67%;" /></p>
-<p><img src="D:\ad\github_blog\source\_posts\Meta-learning-MAML-implement\image-20211214171925530.png" alt="Source of images: http://speech.ee.ntu.edu.tw/~tlkagk/courses/ML_2019/Lecture/Meta1%20(v6).pdf" style="zoom:67%;" /></p>
+<p><img src="image-20211214171911491.png" alt="Source of images: http://speech.ee.ntu.edu.tw/~tlkagk/courses/ML_2019/Lecture/Meta1%20(v6).pdf" style="zoom:67%;" /></p>
+<p><img src="image-20211214171925530.png" alt="Source of images: http://speech.ee.ntu.edu.tw/~tlkagk/courses/ML_2019/Lecture/Meta1%20(v6).pdf" style="zoom:67%;" /></p>
 <p>对于MAML中，我们只考虑如何对meta模型的初始化参数<span class="math inline">\(\Phi\)</span>进行学习。怎样对<span class="math inline">\(F(\Phi)\)</span>进行学习，使得针对一个新的任务能更快收敛呢? 我们首先做出如下定义：</p>
 <h5 id="notions">Notions:</h5>
 <ol type="1">
@@ -258,7 +258,7 @@ l_n(\theta_0) = l_{submodel}(x, y |\theta_0)
 \]</span></p>
 <h5 id="workflow-showed-below">Workflow showed below:</h5>
 <p>Slide copied from : http://speech.ee.ntu.edu.tw/~tlkagk/courses/ML_2019/Lecture/Meta1%20(v6).pdf</p>
-<p><img src="D:\ad\github_blog\source_posts\Meta-learning-MAML-implement\2.png" /></p>
+<p><img src="2.png" /></p>
 <h3 id="implement-details">Implement details:</h3>
 <ol type="1">
 <li>子任务模型由meta任务模型初始化得到（即是由 <span class="math inline">\(\Phi\)</span> 初始化 <span class="math inline">\(\theta^n\)</span> 的过程），参数由meta model参数clone得到。此时sub weight应该是torch.Tensor，不能使用torch.optim更新，需要自己实现gradient update。 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MetaLayer</span>(<span class="params">nn.Module</span>):</span></span><br><span class="line">  <span class="comment"># 继承上次module的参数</span></span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">__init__</span>():</span></span><br><span class="line">		sub_model.weight = meta_model.weight.clone()</span><br><span class="line">	...</span><br><span class="line">	</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Model</span>(<span class="params">nn.Module</span>):</span></span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">init_weight</span>)</span></span><br><span class="line"><span class="function">  <span class="title">def</span> <span class="title">update</span>(<span class="params">meta_model</span>):</span></span><br><span class="line">      <span class="comment"># 这里的Meta_model是identical to sub_model</span></span><br><span class="line">      <span class="comment"># 更新sub_model时，由于sub_model clone自meta model, 所以sub_model.grad=None. </span></span><br><span class="line">      <span class="comment"># 我们需要使用 sub_model.weight = sub_model.weight - lr * meta_model.weight.grad</span></span><br><span class="line">      <span class="comment"># 即时上文中</span></span><br><span class="line">		 <span class="keyword">for</span> layer, parent_layer <span class="keyword">in</span> <span class="built_in">zip</span>(self.model, meta_model):</span><br><span class="line">          layer.weight -= lr * meta_layer.grad</span><br><span class="line">          layer.bias -= lr * meta_layer.bias</span><br><span class="line">      ...</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Meta_model</span>():</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>():</span></span><br><span class="line">      <span class="comment"># 这里的Meta_model是identical to sub_model</span></span><br><span class="line">      self.model = Model()</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">get_submodel</span>(<span class="params">N</span>):</span></span><br><span class="line">      sub_model = [Model(self.model) <span class="keyword">for</span> N times] </span><br></pre></td></tr></table></figure></li>
@@ -285,7 +285,7 @@ l_n(\theta_0) = l_{submodel}(x, y |\theta_0)
 <p>[3]. https://zhuanlan.zhihu.com/p/151384364</p>
 <h3 id="appendix">Appendix:</h3>
 <h4 id="first-order-approximation">1.First order approximation</h4>
-<p><img src="D:\ad\github_blog\source\_posts\Meta-learning-MAML-implement.assets\image-20211214172315594-16395326567571.png" alt="image-20211214172315594" style="zoom:50%;" /></p>
+<p><img src="image-20211214172315594-16395326567571.png" alt="image-20211214172315594"  /></p>
 
       
     </div>
