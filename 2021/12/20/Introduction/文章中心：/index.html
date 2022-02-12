@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="论文（设计）选题目的、工作任务 选题目的 近年来，随着深度学习技术逐渐不断发展，我们看到了在自然语言处理问题上已经取得的巨大进展，特别是在问答系统(Question Answering)领域。但是与此同时，也有越来越多的研究证据表明在面临仅有少量训练数据样本，跨领域之间的问题时，目前的模型仍然无法在测试样本集上获得令人满意的效果。因此，如何实现一种少样本的，跨领域之间的，具有较强泛化能力的自然">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Notes&amp;Words">
+<meta property="og:url" content="http://example.com/2021/12/20/Introduction/%E6%96%87%E7%AB%A0%E4%B8%AD%E5%BF%83%EF%BC%9A/index.html">
+<meta property="og:site_name" content="Notes&amp;Words">
+<meta property="og:description" content="论文（设计）选题目的、工作任务 选题目的 近年来，随着深度学习技术逐渐不断发展，我们看到了在自然语言处理问题上已经取得的巨大进展，特别是在问答系统(Question Answering)领域。但是与此同时，也有越来越多的研究证据表明在面临仅有少量训练数据样本，跨领域之间的问题时，目前的模型仍然无法在测试样本集上获得令人满意的效果。因此，如何实现一种少样本的，跨领域之间的，具有较强泛化能力的自然">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="c:/Users/we1k/AppData/Roaming/Typora/typora-user-images/image-20211220165556840.png">
+<meta property="article:published_time" content="2021-12-20T09:41:46.137Z">
+<meta property="article:modified_time" content="2021-12-20T09:41:46.138Z">
+<meta property="article:author" content="we1k">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="c:/Users/we1k/AppData/Roaming/Typora/typora-user-images/image-20211220165556840.png">
+
+<link rel="canonical" href="http://example.com/2021/12/20/Introduction/%E6%96%87%E7%AB%A0%E4%B8%AD%E5%BF%83%EF%BC%9A/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title> | Notes&Words</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Notes&Words</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/12/20/Introduction/%E6%96%87%E7%AB%A0%E4%B8%AD%E5%BF%83%EF%BC%9A/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="we1k">
+      <meta itemprop="description" content="mix 7 mix 8">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Notes&Words">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-12-20 17:41:46" itemprop="dateCreated datePublished" datetime="2021-12-20T17:41:46+08:00">2021-12-20</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h5 id="论文设计选题目的工作任务">论文（设计）选题目的、工作任务</h5>
+<h6 id="选题目的">选题目的</h6>
+<p>近年来，随着深度学习技术逐渐不断发展，我们看到了在自然语言处理问题上已经取得的巨大进展，特别是在问答系统(Question Answering)领域。但是与此同时，也有越来越多的研究证据表明在面临仅有少量训练数据样本，跨领域之间的问题时，目前的模型仍然无法在测试样本集上获得令人满意的效果。因此，如何实现一种少样本的，跨领域之间的，具有较强泛化能力的自然语言处理模型已经成为各位深度学习研究人员的重点研究对象。</p>
+<p>此次论文选题的目的在于通过尝试多种的方法，探究不同模型对问答系统基准实验泛化能力的影响。此选题能够从实际的角度出发，着眼于现实世界，构造一个相对于问答系统基准实验上的，更具泛化能力的模型。</p>
+<h6 id="工作任务">工作任务:</h6>
+<p>A. 收集不同领域问答系统数据集</p>
+<pre><code>1. 使用当前研究领域中的现有数据集，如SQuAD数据集
+2. 收集本项目相关数据集</code></pre>
+<p>B. 探究小样本任务中的方法 1. 元学习模型(Meta learning) 2. 数据增强(Data Augmentation) 3. 领域对抗训练模型(Domain-Adversarial)</p>
+<p>C. 在强大的预训练语言模型的辅助下，构造一个问答系统</p>
+<pre><code>1. 构建一个问答系统
+2. 利用大规模预训练语言模型进行微调，如BERT模型，GPT2模型</code></pre>
+<p>D. 分析不同方法在问答系统基准实验的影响</p>
+<h5 id="目前资料收集情况含指定参考资料">目前资料收集情况（含指定参考资料）</h5>
+<p>问答系统与数据集:无论是从研究角度还是从实践角度来看，问答系统都是一项重要的NLP任务。</p>
+<p>斯坦福QA系统数据集: SQuAD (https://rajpurkar.github.io/SQuAD-explorer/)，</p>
+<p>NewsQA: https://arxiv.org/abs/1611.09830</p>
+<p>而更多数据集需要收集</p>
+<p>预训练语言模型: 随着预训练数据量的增加，网络结构的逐渐复杂，模型参数的急剧上升，使得BERT，GPT等模型已经在NLP的多个任务中表现出了其自身大量预训练任务的优势。成为NLP相关任务中的炙手可热的轿子。</p>
+<p>original BERT paper: https://arxiv.org/abs/1810.04805</p>
+<p>RoBERTa: https://arxiv.org/pdf/1907.11692.pdf</p>
+<h5 id="论文设计完成计划">论文（设计）完成计划</h5>
+<ol type="a">
+<li>1月上旬完成数据集收集任务</li>
+<li>2月下旬完成benchmark模型构建，并尝试在benchmark上训练</li>
+<li>3月上旬完成变种模型构建，并分析结果</li>
+<li>4月中旬完成论文写作</li>
+<li>4月下旬完成论文修改</li>
+</ol>
+<h4 id="开题答辩">开题答辩</h4>
+<h5 id="选题意义">选题意义</h5>
+<p><code>你要说清楚你的选题将对那些研究理论和那些研究项目产生怎样的推动作用，或者你的选题在实际应用中有什么指导意义。选题意义要着重突出这几点：1、你的选题是前人没有研究过的，最好有具体数据或者文章来说明这一点，这样比较有可信度。2、你的选题前人研究过，但是出于各种原因并没有研究到位，或者没有解决实际问题，或者研究的方法和结果不尽如人意。以上两点都需要你有具体的例子或者数据来证明，提高可信度</code></p>
+<p>自然语言处理是实现人工智能技术中至关重要的一个环节。其赋予计算机“理解”人类语言的能力，使得计算机能够通过接受文本语言形式的输入，经过处理转换为机器语言。自然语言处理技术给计算机和人类之间搭建了一架沟通的桥梁，让人类和计算机之间的交互方式变得更加方便，更加简单。在如今网络信息爆炸增长的时代，如何高效地，精确地检索和处理信息成为了一个难题。而自然语言处理技术正是这样一个可以提供便捷地人机交互方式的重要途径。</p>
+<p>近年来，随着深度学习在自然语言处理领域研究的不断深入发展，利用神经网络进行语义分析，信息检索，机器翻译等自然语言处理任务已成为主流研究方法。 相较于二十世纪提出的基于规则匹配和复杂逻辑推理的数据统计模型，深度学习的神经网络技术能够通过更好地处理语句中深层次的语义信息，实现端对端地模型训练，避免依赖统计模型中各个独立子模块的信息交互处理。</p>
+<p>问答系统作为自然语言处理中的一种信息检索（Information Retrieval）技术，通过接受用户以自然语言文本（非结构化文本）形式输入问题，自动处理并返回对应问题答案的技术。作为自然语言处理的明日之星，问答系统在人们的日常生活的多个领域中拥有重大的实际应用价值。比如聊天机器人，智能客服，搜索引擎，知识图谱等。</p>
+<p>在问答系统中，我们也可以根据信息来源划分为基于文本段落、基于网络文件、基于知识库等类别；根据问题类型划分为简单单领域问题和复杂多领域问题、开放性领域和限定性领域等。而在开放性领域进行自动问答则既是重点也是难点。目前提出的大多数模型仅仅考虑训练数据与测试数据都属于同一领域分布的情况，但是在现实生活中，训练数据与测试数据属于不同领域分布等情况往往更加普遍。如何利用少量的跨领域测试样本，训练出一个泛化能力强，模型收敛快，效果更好的开放性领域问答系统，是把智能问答系统应用到更加广泛的日常生活中的关键之处，也是实现强人工智能的必经之路。</p>
+<p>目前还有什么问题? 比如training test dataset distribution 不一致</p>
+<p>训练样本分布和测试样本分布不一致 On the other hand, humans can easily generalize beyond their training distribution–while not strictly from our training distribution, we can effortlessly understand novels set in fictional worlds and quickly understand the meanings of new words. How can we build NLP systems that generalize like humans? From a practical perspective, robustness to out-of-distribution data is critical for building accurate NLP systems in the real world since train and test data often come from distinct user interactions.</p>
+<h5 id="国内外研究现状概述">国内外研究现状概述</h5>
+<h5 id="问答系统-信息检索">问答系统， 信息检索</h5>
+<p>当问答系统接受到用户的自然语言形式输入后，经过自然语言理解，获取语句深层次语义，然后在信息资源库中进行信息检索，最终通过答案抽取或者答案生成输出问题对应答案。</p>
+<p>QA问答系统</p>
+<p>小样本学习</p>
+<p>BERT模型</p>
+<p>数据增强</p>
+<h5 id="主要研究内容">主要研究内容</h5>
+<p><img src="C:\Users\we1k\AppData\Roaming\Typora\typora-user-images\image-20211220165556840.png" alt="image-20211220165556840" style="zoom:67%;" /></p>
+<p>(Bidirectional Encoder Representation from Transformers)</p>
+<p>当问答系统接受到用户的自然语言形式输入后，经过自然语言理解（Natural Language Understanding），获取语句深层次语义，然后在信息资源库中进行信息检索，</p>
+<h5 id="section"></h5>
+<p>QA问答系统</p>
+<p>For QA tasks, models must read passages of text and answer questions about them. Specifically, given a context passage of text and a question to answer, QA models must choose a span of contiguous words within the passage that contains the answer to the question posed. This problem is challenging because models must accurately learn the meaning of both the context passage and the corresponding question, as well as the relationship between them.</p>
+<p>小样本学习</p>
+<p>BERT模型</p>
+<p>数据增强</p>
+<h5 id="拟采用的研究思路">拟采用的研究思路</h5>
+<h5 id="研究工作安排和进度">研究工作安排和进度</h5>
+<h5 id="参考文献">参考文献</h5>
+<p>https://onlinelibrary.wiley.com/doi/abs/10.1002/asi.5090150306</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/12/18/%E6%9D%82%E8%B0%88/" rel="prev" title="杂谈">
+      <i class="fa fa-chevron-left"></i> 杂谈
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/02/12/%E7%88%B1%E6%83%85%E7%AC%94%E8%AE%B0/" rel="next" title="爱情笔记">
+      爱情笔记 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%AE%BA%E6%96%87%E8%AE%BE%E8%AE%A1%E9%80%89%E9%A2%98%E7%9B%AE%E7%9A%84%E5%B7%A5%E4%BD%9C%E4%BB%BB%E5%8A%A1"><span class="nav-number">1.</span> <span class="nav-text">论文（设计）选题目的、工作任务</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E9%80%89%E9%A2%98%E7%9B%AE%E7%9A%84"><span class="nav-number">1.1.</span> <span class="nav-text">选题目的</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E5%B7%A5%E4%BD%9C%E4%BB%BB%E5%8A%A1"><span class="nav-number">1.2.</span> <span class="nav-text">工作任务:</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%9B%AE%E5%89%8D%E8%B5%84%E6%96%99%E6%94%B6%E9%9B%86%E6%83%85%E5%86%B5%E5%90%AB%E6%8C%87%E5%AE%9A%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="nav-number">2.</span> <span class="nav-text">目前资料收集情况（含指定参考资料）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%AE%BA%E6%96%87%E8%AE%BE%E8%AE%A1%E5%AE%8C%E6%88%90%E8%AE%A1%E5%88%92"><span class="nav-number">3.</span> <span class="nav-text">论文（设计）完成计划</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BC%80%E9%A2%98%E7%AD%94%E8%BE%A9"><span class="nav-number"></span> <span class="nav-text">开题答辩</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%80%89%E9%A2%98%E6%84%8F%E4%B9%89"><span class="nav-number">1.</span> <span class="nav-text">选题意义</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%9B%BD%E5%86%85%E5%A4%96%E7%A0%94%E7%A9%B6%E7%8E%B0%E7%8A%B6%E6%A6%82%E8%BF%B0"><span class="nav-number">2.</span> <span class="nav-text">国内外研究现状概述</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%97%AE%E7%AD%94%E7%B3%BB%E7%BB%9F-%E4%BF%A1%E6%81%AF%E6%A3%80%E7%B4%A2"><span class="nav-number">3.</span> <span class="nav-text">问答系统， 信息检索</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%B8%BB%E8%A6%81%E7%A0%94%E7%A9%B6%E5%86%85%E5%AE%B9"><span class="nav-number">4.</span> <span class="nav-text">主要研究内容</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#section"><span class="nav-number">5.</span> <span class="nav-text"></span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%8B%9F%E9%87%87%E7%94%A8%E7%9A%84%E7%A0%94%E7%A9%B6%E6%80%9D%E8%B7%AF"><span class="nav-number">6.</span> <span class="nav-text">拟采用的研究思路</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%A0%94%E7%A9%B6%E5%B7%A5%E4%BD%9C%E5%AE%89%E6%8E%92%E5%92%8C%E8%BF%9B%E5%BA%A6"><span class="nav-number">7.</span> <span class="nav-text">研究工作安排和进度</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE"><span class="nav-number">8.</span> <span class="nav-text">参考文献</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">we1k</p>
+  <div class="site-description" itemprop="description">mix 7 mix 8</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">6</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/we1k" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;we1k" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">we1k</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
